@@ -20,7 +20,22 @@ public:
         string str = "data not found";
         CashElement* el = cash.search(id);
         if (el != nullptr) {
-            str = cash.search(id)->data;
+            //str = cash.search(id)->data;
+            string strDate;
+            ifstream in(path);
+            if (in.is_open())
+            {
+                getline(in, strDate);
+                if (el->date == strDate)
+                {
+                    str = el->data;
+                }
+                else
+                {
+                    cash.addToHead(serchInFile(id));
+                    str = cash.getHead()->data;
+                }
+            }
         }
         else {
             cash.addToHead(serchInFile(id));
@@ -38,18 +53,26 @@ private:
             string str;
             string buf;
             string buf2 = "";
-            int n;
+            string strDate = "";
+            int n=NULL;
+            int counter = 0;
             while (getline(in, str)) {
-                buf = "";
-                for (int i = 0; str[i] != ' '; i++) {
-                    buf += str[i];
+                if (counter == 0) {
+                    strDate = str;
+                    counter++;
                 }
-                n = stringToInt(buf);
-                if (n == id) {
-                    for (int i = buf.size() + 1; i < str.size(); i++) {
-                        buf2 += str[i];
+                else {
+                    buf = "";
+                    for (int i = 0; str[i] != ' '; i++) {
+                        buf += str[i];
                     }
-                    element = new CashElement{ id, buf2 };
+                    n = stringToInt(buf);
+                    if (n == id) {
+                        for (int i = buf.size() + 1; i < str.size(); i++) {
+                            buf2 += str[i];  //данные записываем в буф 2
+                        }
+                        element = new CashElement{ id, buf2,strDate };
+                    }
                 }
             }
             in.close();

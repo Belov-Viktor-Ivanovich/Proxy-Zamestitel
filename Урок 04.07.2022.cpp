@@ -14,5 +14,6 @@ int main()
 {
     Proxy file1("C:\\Users\\Марина\\Desktop\\Proxy.txt");
     cout << file1.getData(123);
+    cout << file1.getData(123);
 }
 
